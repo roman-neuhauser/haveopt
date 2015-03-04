@@ -1,0 +1,161 @@
+.. vim: ft=rst sts=2 sw=2 tw=77
+
+.. :Author: Roman Neuhauser
+.. :Contact: neuhauser+haveopt@sigpipe.cz
+.. :Copyright: This document is in the public domain.
+
+.. this file is marked up using reStructuredText
+   lines beginning with ".." are reST directives
+   "foo_" or "`foo bar`_" is a link, defined at ".. _foo" or ".. _foo bar"
+   "::" introduces a literal block (usually some form of code)
+   "`foo`" is some kind of identifier
+   suspicious backslashes in the text ("`std::string`\s") are required for
+   reST to recognize the preceding character as syntax
+
+.. default-role:: strong
+.. parsed-literal::
+
+  `NAME`
+      `haveopt` — Option parser for sh
+
+  `SYNOPSIS`
+      `. haveopt.sh`
+
+      `haveopt` -h|--help
+      `haveopt` OPTIND OPTNAME OPTARG [OPTSPEC...] -- "$@"
+      `haveopt` OPTIND OPTNAME OPTARG [OPTSPEC...] -- [ARG...]
+
+  `DESCRIPTION`
+      `haveopt` is a *sh(1)*-compatible argument parser similar to `getopts`
+      with added support for long options, as in GNU *getopt(1)*.  Like the
+      POSIX `getopts`, `haveopt` allows for options requiring *option-
+      arguments*.  Unlike GNU *getopt(1)*, `haveopt` does not permit optional
+      *option-arguments*.
+
+      Each time `haveopt` is invoked, it shall place the name of the next
+      *option* in the shell parameter named in the `OPTNAME` operand and
+      the count of *options* and *option-arguments* processed so far in the
+      shell parameter named in `OPTIND`.  If the name reported in `OPTNAME`
+      requires an *option-argument* according to the `OPTSPEC...` list, the
+      shell parameter named in the `OPTARG` operand shall contain according
+      value.  Otherwise, the shell parameter named in `OPTARG` shall be unset.
+
+      Note: the shell parameter named in `OPTIND` assumes values that are
+      one less than what `getopts` would set `OPTIND` to.  This is for two
+      reasons.  First, there's no way a non-privileged shell script could
+      fulfill this promise:
+
+        Whenever the shell is invoked, OPTIND shall be initialized to 1.
+
+      Second, the client code is not forced into funky `Arithmetic Expansion`
+      syntax, plain `shift $OPTIND` will suffice to remove all *options* and
+      *option-arguments* from `$@`.
+
+      `haveopt` is implemented as a *sh(1)* function, loaded into a shell
+      process with
+
+        . haveopt.sh
+
+    `Options`
+
+      `-h`  Display usage string.
+
+      `--help`
+           Display manual page.
+
+    `Operands`
+      `OPTIND`
+        Name of the shell parameter used to communicate the number of
+        *options* and *option-arguments* processed so far.
+      `OPTNAME`
+         Name of the shell parameter used to communicate the *option*
+         extracted.
+      `OPTARG`
+         Name of the shell parameter used to communicate the *option-argument*
+         extracted.
+      `OPTSPEC`
+         A valid *option* name without the leading dashes.  If the *option*
+         requires an *option-argument*, `OPTSPEC` should end with “=”.
+
+  `FILES`
+      `haveopt.sh` must be in `$PATH` for this to work.
+
+  `EXIT STATUS`
+      The `haveopt` utility exits 0 on success, and >0 if an error occurs.
+
+  `EXAMPLES`
+      Adopted from the `getopts` reference in the “XCU Utilities” section
+      of “IEEE Std 1003.1-2008/Cor 1-2013”:
+
+        aflag=
+        bflag=
+        while haveopt OPTIND name OPTARG a b= -- "$@"
+        do
+            case $name in
+            a)    aflag=1;;
+            b)    bflag=1
+                  bval="$OPTARG";;
+            ?)   printf "Usage: %s: [-a] [-b value] args\\n" $0
+                  exit 2;;
+            esac
+        done
+        if [ ! -z "$aflag" ]; then
+            printf "Option -a specified\\n"
+        fi
+        if [ ! -z "$bflag" ]; then
+            printf 'Option -b "%s" specified\\n' "$bval"
+        fi
+        shift $OPTIND
+        printf "Remaining arguments are: %s\\n" "$*"
+
+  `SEE ALSO`
+      autoconf(1), make(1), sh(1).
+
+  `STANDARDS`
+      “IEEE Std 1003.1-2008/Cor 1-2013” aka “POSIX.1-2008”
+      aka “SUSv4TC1” aka “The Open Group Base Specifications Issue 7”.
+
+      `haveopt` is aligned with the definitions laid out in
+      “XBD Utility Syntax Guidelines”, namely guidelines 4-7,9-11,14,
+      with modifications as noted:
+
+        `Guideline 4`:
+          Short options must be preceded by the '-' delimiter character.
+          Long options must be preceded by the '--' delimiter string.
+        `Guideline 5`:
+          One or more short options without *option-arguments*, followed
+          by at most one short option that takes an option-argument,
+          should be accepted when grouped behind one '-' delimiter.
+        `Guideline 6`:
+          Each short option and *option-argument* **should** be a separate
+          argument, `haveopt` also permits applications to specify the
+          option and *option-argument* in the same argument string without
+          intervening `<blank>` characters.
+        `Guideline 7`:
+          *Option-arguments* cannot not be optional.
+        `Guideline 9`:
+          All options must precede operands on the command line.  Option
+          processing stops at the first argument that is neither an option
+          nor an *option-argument*.
+        `Guideline 10`:
+          The first `--` argument that is not an *option-argument* is
+          accepted as a delimiter indicating the end of options.
+          Any following arguments are treated as operands, even if they
+          begin with the '-' character.
+        `Guideline 11`:
+          The order of different options relative to one another does not
+          matter to `haveopt`.  Applications are free to ascribe meaning
+          to option ordering.
+        `Guideline 14`:
+          If an argument can be identified according to Guidelines 3
+          through 10 as an option, or as a group of options without
+          *option-arguments* behind one '-' delimiter, then it is treated
+          as such.
+
+  `AUTHORS`
+      Roman Neuhauser <neuhauser+haveopt@sigpipe.cz>
+          https://github.com/roman-neuhauser/haveopt/
+
+  `BUGS`
+      No doubt plentiful.  Please report them at
+          https://github.com/roman-neuhauser/haveopt/issues

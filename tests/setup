@@ -1,0 +1,10 @@
+. haveopt.sh
+
+dump()
+{
+  local var val
+  for var; do
+    eval val="\"\$$var\""
+    printf "%s=%s\n" "$var" "$val"
+  done
+}

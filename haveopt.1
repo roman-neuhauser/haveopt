@@ -1,0 +1,280 @@
+.\" This document is in the public domain.
+.\" vim: fdm=marker cms=.\\"\ %s
+.
+.\" FRONT MATTER {{{
+.Dd Mar 4, 2015
+.Os
+.Dt HAVEOPT 1
+.
+.Sh NAME
+.Nm haveopt
+.Nd Option parser for sh
+.\" FRONT MATTER }}}
+.
+.\" SYNOPSIS {{{
+.Sh SYNOPSIS
+.Nm
+.Fl h | \-help
+.Nm
+.Ar OPTIND
+.Ar OPTNAME
+.Ar OPTARG
+.Op Ar OPTSPEC Ns ...
+.Li --
+.Li Qq $@
+.Nm
+.Ar OPTIND
+.Ar OPTNAME
+.Ar OPTARG
+.Op Ar OPTSPEC Ns ...
+.Li --
+.Op Ar ARG Ns ...
+.\" SYNOPSIS }}}
+.
+.\" DESCRIPTION {{{
+.Sh DESCRIPTION
+.Nm
+is a
+.Xr sh 1 Ns -compatible
+argument parser similar to
+.Ic getopts
+with added support for long options, as in GNU
+.Xr getopt 1 .
+Like the POSIX
+.Ic getopts ,
+.Nm
+allows for options requiring
+.Em option-arguments .
+Unlike GNU
+.Ic getopt ,
+.Nm
+does not permit
+optional
+.Em option-arguments .
+.Pp
+Each time
+.Nm
+is invoked, it shall place the name of the next
+.Em option
+in the shell
+parameter named in the
+.Ar OPTNAME
+operand and the count of
+.Em options
+and
+.Em option-arguments
+processed so far in the shell parameter named in
+.Ar OPTIND .
+If the name reported in
+.Ar OPTNAME
+requires an
+.Em option-argument
+according to the
+.Ar OPTSPEC Ns ...
+list, the shell parameter named in the
+.Ar OPTARG
+operand shall contain according value.
+Otherwise, the shell parameter named in
+.Ar OPTARG
+shall be unset.
+.Pp
+Note: the shell parameter named in
+.Ar OPTIND
+assumes values that are
+one less than what
+.Ic getopts
+would set
+.Ar OPTIND
+to.
+This is for two reasons.
+First, there's no way a non-privileged shell script could
+fulfill this promise:
+.Bd -ragged -offset "xx"
+Whenever the shell is invoked, OPTIND shall be initialized to 1.
+.Ed
+.Pp
+Second, the client code is not forced into funky
+.Sy Arithmetic Expansion
+syntax, plain
+.Li shift $OPTIND
+will suffice to remove all
+.Em options
+and
+.Em option-arguments
+from
+.Li $@ .
+.Pp
+.Nm
+is implemented as a
+.Xr sh 1
+function, loaded into a shell process with
+.Bd -literal
+  . haveopt.sh
+.Ed
+.
+.Ss Options
+.Bl -tag -width "xx"
+. It Fl h
+Display usage string.
+. It Fl \-help
+Display manual page.
+.El
+.
+.Ss Operands
+.Bl -tag -width "xx" -compact
+. It Ar OPTIND
+Name of the shell parameter used to communicate the number of
+.Em options
+and
+.Em option-arguments
+processed so far.
+. It Ar OPTNAME
+Name of the shell parameter used to communicate the
+.Em option
+extracted.
+. It Ar OPTARG
+Name of the shell parameter used to communicate the
+.Em option-argument
+extracted.
+. It Ar OPTSPEC
+A valid
+.Em option
+name without the leading dashes.
+If the
+.Em option
+requires an
+.Em option-argument ,
+.Ar OPTSPEC
+should end with
+.Dq Li = .
+.El
+.\" }}}
+.
+.\" FILES {{{
+.Sh FILES
+.Pa haveopt.sh
+must be in
+.Ev $PATH
+for this to work.
+.\" }}}
+.
+.\" EXIT STATUS {{{
+.Sh EXIT STATUS
+.Ex -std
+.\" }}}
+.
+.\" EXAMPLES {{{
+.Sh EXAMPLES
+Adopted from the
+.Ic getopts
+reference in the
+.Dq XCU Utilities
+section of
+.Dq IEEE Std 1003.1-2008/Cor 1-2013 :
+.Bd -literal -offset "xx"
+aflag=
+bflag=
+while haveopt OPTIND name OPTARG a b= -- "$@"
+do
+    case $name in
+    a)    aflag=1;;
+    b)    bflag=1
+          bval="$OPTARG";;
+    ?)    printf "Usage: %s: [-a] [-b value] args\\n" $0
+          exit 2;;
+    esac
+done
+if [ ! -z "$aflag" ]; then
+    printf "Option -a specified\\n"
+fi
+if [ ! -z "$bflag" ]; then
+    printf 'Option -b "%s" specified\\n' "$bval"
+fi
+shift $OPTIND
+printf "Remaining arguments are: %s\\n" "$*"
+.Ed
+.\" }}}
+.
+.\" SEE ALSO {{{
+.Sh SEE ALSO
+.Xr autoconf 1 ,
+.Xr make 1 ,
+.Xr sh 1 .
+.\" }}}
+.
+.\" STANDARDS {{{
+.Sh STANDARDS
+.Dq IEEE Std 1003.1-2008/Cor 1-2013
+aka
+.Dq POSIX.1-2013
+aka
+.Dq SUSv4TC1
+aka
+.Dq The Open Group Base Specifications Issue 7 .
+.Pp
+.Nm
+is aligned with the definitions laid out in
+.Dq XBD Utility Syntax Guidelines ,
+namely guidelines 4-7,9-11,14, with modifications as noted:
+.Bl -tag -width "xx"
+.It Guideline 4:
+Short options must be preceded by the '-' delimiter character.
+Long options must be preceded by the '--' delimiter string.
+.It Guideline 5:
+One or more short options without
+.Em option-arguments ,
+followed by at most one short option that takes an
+.Em option-argument ,
+should be accepted when grouped behind one '-' delimiter.
+.It Guideline 6:
+Each short option and
+.Em option-argument
+should be a separate argument,
+.Nm
+also permits applications to specify the option and
+.Em option-argument
+in the same argument string without
+intervening
+.Li <blank>
+characters.
+.It Guideline 7:
+.Em Option-arguments
+cannot not be optional.
+.It Guideline 9:
+All options must precede operands on the command line.  Option
+processing stops at the first argument that is neither an option
+nor an
+.Em option-argument .
+.It Guideline 10:
+The first
+.Li --
+argument that is not an
+.Em option-argument
+is accepted as a delimiter indicating the end of options.
+Any following arguments are treated as operands, even if they
+begin with the '-' character.
+.It Guideline 11:
+The order of different options relative to one another does not
+matter to
+.Nm .
+Applications are free to ascribe meaning to option ordering.
+.It Guideline 14:
+If an argument can be identified according to Guidelines 3
+through 10 as an option, or as a group of options without
+.Em option-arguments
+behind one '-' delimiter, then it is treated
+as such.
+.\" }}}
+.
+.\" AUTHORS {{{
+.Sh AUTHORS
+.An Roman Neuhauser Aq Mt neuhauser+haveopt@sigpipe.cz
+.Lk https://github.com/roman-neuhauser/haveopt/
+.\" AUTHORS }}}
+.
+.\" BUGS {{{
+.Sh BUGS
+No doubt plentiful.
+Please report them at
+.Lk https://github.com/roman-neuhauser/haveopt/issues
+.\" BUGS }}}

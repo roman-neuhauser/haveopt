@@ -1,0 +1,39 @@
+# norootforbuild
+# Maintainer: Roman Neuhauser <neuhauser+haveopt@sigpipe.cz>
+
+Name:           haveopt
+Version:        __VERSION__
+Release:        0
+License:        MIT
+Summary:        Option parser for sh
+Url:            https://github.com/roman-neuhauser/%{name}
+Group:          Development/Tools
+Source:         %{name}-%{version}.tar.gz
+BuildRequires:  filesystem
+BuildArch:      noarch
+BuildRoot:      %_tmppath/%name-%version-build
+BuildRequires:  cram
+BuildRequires:  sh
+
+%define haveopt_make  make PREFIX=%{_prefix}
+%description
+sh(1)-compatible argument parser similar to getopts with support for long options.
+
+%prep
+%setup -q
+
+%build
+%haveopt_make
+
+%check
+%haveopt_make check
+
+%install
+%haveopt_make install DESTDIR=%{buildroot}
+
+%files
+%defattr(-,root,root)
+%{_bindir}/haveopt.sh
+%{_mandir}/man1/haveopt.1.gz
+
+%changelog

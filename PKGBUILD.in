@@ -1,0 +1,30 @@
+# Maintainer: Roman Neuhauser <neuhauser+haveopt@sigpipe.cz>
+pkgname=haveopt
+pkgver=__VERSION__
+pkgrel=1
+pkgdesc="Option parser for sh"
+arch=(any)
+url="https://github.com/roman-neuhauser/$pkgname"
+license=(MIT)
+depends=()
+checkdepends=(cram sh)
+source=($pkgname-$pkgver.tar.gz)
+sha1sums=(SKIP)
+
+build() {
+  _make
+}
+
+check() {
+  _make check
+}
+
+package() {
+  _make install DESTDIR="$pkgdir/"
+}
+
+_make() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make PREFIX=/usr "$@"
+}
+
