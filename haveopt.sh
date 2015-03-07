@@ -14,11 +14,11 @@ haveopt()
   # {{{
   local usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
 
-  if (( $# <= 3 )); then
+  if [ $# -le 3 ]; then
     printf >&2 "$usage"
     return 2
   fi
-  if (( $# == 4 )) && [ "x$4" != x-- ]; then
+  if [ $# -eq 4 ] && [ "x$4" != x-- ]; then
     printf >&2 "$usage"
     return 2
   fi
@@ -51,7 +51,7 @@ haveopt()
 
   shift $i
 
-  (( i = i + 1 ))
+  i=$(( i + 1 ))
   local arg="$1"
   local optarg="${2:-}"
 
@@ -65,7 +65,7 @@ haveopt()
   local haveopt_iteration
 
   for haveopt_iteration in 1 2 3; do
-    (( haveopt_iteration < 3 )) || {
+    [ $haveopt_iteration -lt 3 ] || {
       printf >&2 -- "haveopt: internal error.  infinite loop detected.\n"
       return 2
     }
@@ -88,7 +88,7 @@ haveopt()
         ;;
         --$optname)
           eval "$np=\"\$optname\""
-          if (( needs_optarg )); then
+          if [ $needs_optarg -ne 0 ]; then
             i=$(( i + 1 ))
             eval "$ap=\"\$2\""
           else
@@ -113,13 +113,13 @@ haveopt()
         case "$arg" in
         -$optname)
           eval "$np=\"\$optname\""
-          if (( needs_optarg )); then
+          if [ $needs_optarg -ne 0 ]; then
             i=$(( i + 1 ))
             eval "$ap=\"\$optarg\""
           else
             eval "$ap="
           fi
-          if (( bundle )); then
+          if [ $bundle -ne 0 ]; then
             eval "$cookie=\$bit"
           else
             eval "$ip=\$i"
@@ -136,7 +136,7 @@ haveopt()
       bundle=1
       local opts="${arg#-}"
       local blen=${#opts}
-      if (( blen == bit )); then
+      if [ $blen -eq $bit ]; then
         eval "$ip=\$i"
         return 1
       fi
@@ -147,7 +147,7 @@ haveopt()
       arg="${arg%$rest}"
       arg="-$arg"
       optarg="${opts#$prev?}"
-      (( bit = bit + 1 ))
+      bit=$(( bit + 1 ))
       continue
       # }}}
     ;;
