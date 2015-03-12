@@ -1,5 +1,5 @@
-short options, bundled, happy path
-==================================
+short options, bundled, stuck optarg
+====================================
 
 setup
 *****
@@ -13,31 +13,26 @@ test
 
 ::
 
-  $ set I N A l o w -- -owl rofl lmao
+  $ set I N A b l= -- -blow rofl lmao
 
   $ I=0 N= A=
 
   $ haveopt "$@"
   $ dump I N A
   I=0
-  N=o
-  A=
-
-  $ haveopt "$@"
-  $ dump I N A
-  I=0
-  N=w
+  N=b
   A=
 
   $ haveopt "$@"
   $ dump I N A
   I=1
   N=l
-  A=
+  A=ow
 
   $ haveopt "$@"
   [1]
   $ dump I N A
   I=1
   N=l
-  A=
+  A=ow
+

@@ -13,7 +13,7 @@ test
 
 ::
 
-  $ set I N A b l= -- -blow rofl lmao
+  $ set I N A b l= -- -bl ow rofl lmao
 
   $ I=0 N= A=
 
@@ -25,14 +25,14 @@ test
 
   $ haveopt "$@"
   $ dump I N A
-  I=0
+  I=2
   N=l
   A=ow
 
   $ haveopt "$@"
   [1]
   $ dump I N A
-  I=0
+  I=2
   N=l
   A=ow
 
