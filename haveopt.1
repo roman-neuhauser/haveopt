@@ -165,30 +165,31 @@ for this to work.
 .
 .\" EXAMPLES {{{
 .Sh EXAMPLES
-Adopted from the
-.Ic getopts
-reference in the
-.Dq XCU Utilities
-section of
-.Dq IEEE Std 1003.1-2008/Cor 1-2013 :
+This example demonstrates both short and long options,
+each with and without an
+.Em option-argument :
 .Bd -literal -offset "xx"
-aflag=
-bflag=
-while haveopt OPTIND name OPTARG a b= -- "$@"
+OPTIND=0
+o_compression=gzip
+o_filesfrom=
+while haveopt OPTIND name OPTARG J xz T= files-from= -- "$@"
 do
-    case $name in
-    a)    aflag=1;;
-    b)    bflag=1
-          bval="$OPTARG";;
-    ?)    printf "Usage: %s: [-a] [-b value] args\\n" $0
-          exit 2;;
-    esac
+  case $name in
+  J|xz)
+    o_compression=xz
+  ;;
+  T|files-from)
+    o_filesfrom="$OPTARG"
+  ;;
+  ?)
+    printf "Usage: %s: [options] operands\\n" $0
+    exit 2
+  ;;
+  esac
 done
-if [ ! -z "$aflag" ]; then
-    printf "Option -a specified\\n"
-fi
-if [ ! -z "$bflag" ]; then
-    printf 'Option -b "%s" specified\\n' "$bval"
+printf "Use %s (de)compression\\n" "$o_compression"
+if [ ! -z "$o_filesfrom" ]; then
+  printf 'Get pathnames to extract from "%s"\\n' "$o_filesfrom"
 fi
 shift $OPTIND
 printf "Remaining arguments are: %s\\n" "$*"
