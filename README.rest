@@ -34,11 +34,12 @@
 
       Each time `haveopt` is invoked, it shall place the name of the next
       *option* in the shell parameter named in the `OPTNAME` operand and
-      the count of *options* and *option-arguments* processed so far in the
-      shell parameter named in `OPTIND`.  If the name reported in `OPTNAME`
-      requires an *option-argument* according to the `OPTSPEC...` list, the
-      shell parameter named in the `OPTARG` operand shall contain according
-      value.  Otherwise, the shell parameter named in `OPTARG` shall be unset.
+      the count of arguments processed so far in the shell parameter named
+      in `OPTIND`.
+      If the name reported in `OPTNAME` requires an *option-argument*
+      according to the `OPTSPEC...` list, the shell parameter named in the
+      `OPTARG` operand shall contain according value.
+      Otherwise, the shell parameter named in `OPTARG` shall be unset.
 
       Note: the shell parameter named in `OPTIND` assumes values that are
       one less than what `getopts` would set `OPTIND` to.  This is for two
