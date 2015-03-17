@@ -35,8 +35,18 @@ test
 
   $ tool -abcd -cd
   I=1
-  N=b
-  A=cd
+  N=c
+  A=
+
+  $ tool -abcd -cd
+  I=2
+  N=d
+  A=
+
+  $ tool -abcd -cd
+  I=2
+  N=d
+  A=
   [1]
 
   $ I=0 N= A=
