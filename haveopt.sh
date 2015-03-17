@@ -23,6 +23,10 @@ haveopt()
     return 2
   fi
   
+  # name of the cookie used to store
+  # the iterator over bundled short options
+  local cookie="HAVEOPT_shopt_iter__$(printf "%s\0" "$@" | cksum | tr ' ' _)"
+
   local ip="$1" np="$2" ap="$3"; shift 3
 
   local sopts soptstr lopts
@@ -51,6 +55,7 @@ haveopt()
   shift $i
 
   local arg="$1"
+  local opt
   local optarg
 
   case $arg in
@@ -85,7 +90,6 @@ haveopt()
       ;;
       esac
     done
-    return 1
     # }}}
   ;;
   -?)
@@ -114,14 +118,10 @@ haveopt()
       ;;
       esac
     done
-    return 1
     # }}}
   ;;
   -??*)
     # bundle of short options {{{
-    # name of the cookie used to store
-    # the iterator over bundled short options
-    local cookie="HAVEOPT_shopt_iter__$ip_$np_$ap"
     local bit
     eval "bit=\"\${$cookie:-0}\""
 
@@ -170,12 +170,12 @@ haveopt()
       ;;
       esac
     done # }}}
-    return 1
     # }}}
   ;;
   esac
 
   eval "$ip=\$i"
+  unset $cookie
 
   return 1
 }
