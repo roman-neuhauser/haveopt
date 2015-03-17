@@ -53,140 +53,129 @@ haveopt()
   local arg="$1"
   local optarg
 
-  local haveopt_iteration
-
-  for haveopt_iteration in 1 2 3; do
-    [ $haveopt_iteration -lt 3 ] || {
-      printf >&2 -- "haveopt: internal error.  infinite loop detected.\n"
-      return 2
-    }
-
-    case $arg in
-    --?*)
-      # long option {{{
-      for opt in $lopts; do
-        local optname=${opt%=}
-        local needs_optarg=0
-        case "$opt" in
-        *=) needs_optarg=1 ;;
-        esac
-        case "$arg" in
-        --$optname=*)
+  case $arg in
+  --?*)
+    # long option {{{
+    for opt in $lopts; do
+      local optname=${opt%=}
+      local needs_optarg=0
+      case "$opt" in
+      *=) needs_optarg=1 ;;
+      esac
+      case "$arg" in
+      --$optname=*)
+        i=$(( i + 1 ))
+        optarg="${arg#--$optname=}"
+        eval "$np=\"\$optname\""
+        eval "$ap=\"\$optarg\""
+        eval "$ip=\$i"
+        return 0
+      ;;
+      --$optname)
+        eval "$np=\"\$optname\""
+        if [ $needs_optarg -ne 0 ]; then
+          i=$(( i + 2 ))
+          eval "$ap=\"\$2\""
+        else
           i=$(( i + 1 ))
-          optarg="${arg#--$optname=}"
-          eval "$np=\"\$optname\""
-          eval "$ap=\"\$optarg\""
-          eval "$ip=\$i"
-          return 0
-        ;;
-        --$optname)
-          eval "$np=\"\$optname\""
-          if [ $needs_optarg -ne 0 ]; then
-            i=$(( i + 2 ))
-            eval "$ap=\"\$2\""
-          else
-            i=$(( i + 1 ))
-            eval "$ap="
-          fi
-          eval "$ip=\$i"
-          return 0
-        ;;
-        esac
-      done
-      return 1
-      # }}}
-    ;;
-    -?)
-      # short option {{{
-      for opt in $sopts; do
-        local optname=${opt%=}
-        local needs_optarg=0
-        case "$opt" in
-        *=) needs_optarg=1 ;;
-        esac
-        case "$arg" in
-        -$optname)
-          # i'm torn: brevity or side-by-side view?
-          if [ $needs_optarg -ne 0 ]; then
-            i=$(( i + 2 ))
-            optarg="$2"
-          else
-            i=$(( i + 1 ))
-            optarg=
-          fi
-          eval "$ip=\$i"
-          eval "$np=\"\$optname\""
-          eval "$ap=\"\$optarg\""
-          # no cookie
-          return 0
-        ;;
-        esac
-      done
-      return 1
-      # }}}
-    ;;
-    -??*)
-      # bundle of short options {{{
-      # name of the cookie used to store
-      # the iterator over bundled short options
-      local cookie="HAVEOPT_shopt_iter__$ip_$np_$ap"
-      local bit
-      eval "bit=\"\${$cookie:-0}\""
-
-      local prev="$(printf "%${bit}s" '' | tr ' ' '?')"
-      arg="-${arg#-$prev}"
-
-      for opt in $sopts; do # {{{
-        local optname=${opt%=}
-        local needs_optarg=0
-        case "$opt" in
-        *=) needs_optarg=1 ;;
-        esac
-        case "$arg" in
-        -$optname)
-          # last option in the bundle
-          bit=0
-          if [ $needs_optarg -ne 0 ]; then
-            i=$(( i + 2 ))
-            optarg="$2"
-          else
-            i=$(( i + 1 ))
-            optarg=
-          fi
-          eval "$ip=\$i"
-          eval "$np=\"\$optname\""
-          eval "$ap=\"\$optarg\""
-          eval "$cookie=\$bit"
-          return
-        ;;
-        -$optname?*)
-          # *not* the last option in the bundle
-          # *or* a stuck optarg
-          bit=$(( bit + 1 ))
-          if [ $needs_optarg -ne 0 ]; then
-            # stuck optarg
-            optarg="${arg#-?}"
-            i=$(( i + 1 ))
-          else
-            optarg=
-          fi
-          eval "$ip=\$i"
-          eval "$np=\"\$optname\""
-          eval "$ap=\"\$optarg\""
-          eval "$cookie=\$bit"
-          return
-        ;;
-        esac
-      done # }}}
-      return 1
-      # }}}
-    ;;
-    esac
-
-    eval "$ip=\$i"
-
+          eval "$ap="
+        fi
+        eval "$ip=\$i"
+        return 0
+      ;;
+      esac
+    done
     return 1
-  done
+    # }}}
+  ;;
+  -?)
+    # short option {{{
+    for opt in $sopts; do
+      local optname=${opt%=}
+      local needs_optarg=0
+      case "$opt" in
+      *=) needs_optarg=1 ;;
+      esac
+      case "$arg" in
+      -$optname)
+        # i'm torn: brevity or side-by-side view?
+        if [ $needs_optarg -ne 0 ]; then
+          i=$(( i + 2 ))
+          optarg="$2"
+        else
+          i=$(( i + 1 ))
+          optarg=
+        fi
+        eval "$ip=\$i"
+        eval "$np=\"\$optname\""
+        eval "$ap=\"\$optarg\""
+        # no cookie
+        return 0
+      ;;
+      esac
+    done
+    return 1
+    # }}}
+  ;;
+  -??*)
+    # bundle of short options {{{
+    # name of the cookie used to store
+    # the iterator over bundled short options
+    local cookie="HAVEOPT_shopt_iter__$ip_$np_$ap"
+    local bit
+    eval "bit=\"\${$cookie:-0}\""
 
-  return 2
+    local prev="$(printf "%${bit}s" '' | tr ' ' '?')"
+    arg="-${arg#-$prev}"
+
+    for opt in $sopts; do # {{{
+      local optname=${opt%=}
+      local needs_optarg=0
+      case "$opt" in
+      *=) needs_optarg=1 ;;
+      esac
+      case "$arg" in
+      -$optname)
+        # last option in the bundle
+        bit=0
+        if [ $needs_optarg -ne 0 ]; then
+          i=$(( i + 2 ))
+          optarg="$2"
+        else
+          i=$(( i + 1 ))
+          optarg=
+        fi
+        eval "$ip=\$i"
+        eval "$np=\"\$optname\""
+        eval "$ap=\"\$optarg\""
+        eval "$cookie=\$bit"
+        return
+      ;;
+      -$optname?*)
+        # *not* the last option in the bundle
+        # *or* a stuck optarg
+        bit=$(( bit + 1 ))
+        if [ $needs_optarg -ne 0 ]; then
+          # stuck optarg
+          optarg="${arg#-?}"
+          i=$(( i + 1 ))
+        else
+          optarg=
+        fi
+        eval "$ip=\$i"
+        eval "$np=\"\$optname\""
+        eval "$ap=\"\$optarg\""
+        eval "$cookie=\$bit"
+        return
+      ;;
+      esac
+    done # }}}
+    return 1
+    # }}}
+  ;;
+  esac
+
+  eval "$ip=\$i"
+
+  return 1
 }
