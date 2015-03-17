@@ -90,6 +90,13 @@ haveopt()
       ;;
       esac
     done
+    i=$(( i + 1 ))
+    optname="${arg#--}"
+    optname="${optname%%=*}"
+    eval "$ip=\$i"
+    eval "$np=?"
+    eval "$ap=\"\$optname\""
+    return
     # }}}
   ;;
   -?)
@@ -118,6 +125,12 @@ haveopt()
       ;;
       esac
     done
+    i=$(( i + 1 ))
+    optname="${arg#-}"
+    eval "$ip=\$i"
+    eval "$np=?"
+    eval "$ap=\"\$optname\""
+    return
     # }}}
   ;;
   -??*)
@@ -171,6 +184,25 @@ haveopt()
       ;;
       esac
     done # }}}
+
+    optname="${arg#-}"
+    case $optname in
+    ?)
+      bit=0
+      i=$(( i + 1 ))
+    ;;
+    *)
+      local tail tlen=$(( ${#optname} - 1 ))
+      tail="$(printf "%${tlen}s" '' | tr ' ' '?')"
+      optname="${optname%$tail}"
+      bit=$(( bit + 1 ))
+    ;;
+    esac
+    eval "$ip=\$i"
+    eval "$np=?"
+    eval "$ap=\"\$optname\""
+    eval "$cookie=\$bit"
+    return
     # }}}
   ;;
   esac
