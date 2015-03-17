@@ -157,6 +157,7 @@ haveopt()
         bit=$(( bit + 1 ))
         if [ $needs_optarg -ne 0 ]; then
           # stuck optarg
+          bit=0
           optarg="${arg#-?}"
           i=$(( i + 1 ))
         else
