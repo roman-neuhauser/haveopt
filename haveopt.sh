@@ -1,14 +1,5 @@
 # vim: ft=sh ts=2 sts=2 sw=2 et fdm=marker cms=\ #\ %s
 
-# TODO: get rid of this with some clever reparsing trickery.
-# TODO: the goal is the `haveopt` function being the only
-# TODO: statement as seen by a shell sourcing this file.
-case "$0" in
-*/haveopt)
-  printf >&2 "you need to source the script with '. haveopt' and use the eponymous function\n"
-  exit 1
-esac
-
 haveopt()
 {
   # {{{
