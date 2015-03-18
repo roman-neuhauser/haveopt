@@ -2,7 +2,7 @@
 
 tool()
 {
-  local ex=0 p="$channels" os="$optspecs"
+  local ex=0 p="${channels-}" os="${optspecs-}"
   haveopt $p $os -- "$@" || ex=$?
   dump $p
   return $ex
@@ -14,7 +14,7 @@ dump()
   # set-and-empty vs unset parameters.
   local isset var val
   for var; do
-    eval val="\"\$$var\""
+    eval val="\"\${$var-}\""
     eval "isset=\${$var+<empty>}"
     printf "%s=%s\n" "$var" "${val:-$isset}"
   done

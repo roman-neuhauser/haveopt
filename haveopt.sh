@@ -26,7 +26,7 @@ haveopt()
 
   local ip="$1" np="$2" ap="$3"; shift 3
 
-  local sopts soptstr lopts
+  local sopts= soptstr= lopts=
 
   while [ "x$1" != x-- ]; do
     case "$1" in
@@ -51,7 +51,7 @@ haveopt()
 
   shift $i
 
-  local arg="$1"
+  local arg="${1-}"
   local opt
   local optarg
 
