@@ -2,7 +2,7 @@
 
 haveopt()
 {
-  # {{{
+  # configuration {{{
   local haveopt_usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
 
   if [ $# -eq 1 ]; then
@@ -47,6 +47,7 @@ haveopt()
   shift
   # }}}
 
+  # one shot {{{
   local haveopt_optind
   eval "haveopt_optind=\"\$$haveopt_ip\""
   haveopt_optind=$(expr "$haveopt_optind" : '\([0-9]*\)' \| 0)
@@ -213,6 +214,7 @@ haveopt()
   eval "$haveopt_np='?'"
   eval "unset $haveopt_ap"
   unset $haveopt_cookie
+  # }}}
 
   return 1
 }
