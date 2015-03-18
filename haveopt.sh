@@ -14,6 +14,12 @@ haveopt()
   # {{{
   local usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
 
+  if [ $# -eq 1 ]; then
+    case $1 in
+      -h|--help) printf >&2 "$usage" ;;
+    esac
+    return 0
+  fi
   if [ $# -le 3 ]; then
     printf >&2 "$usage"
     return 2

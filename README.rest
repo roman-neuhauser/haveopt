@@ -74,11 +74,8 @@
         . haveopt.sh
 
     `Options`
-
-      `-h`  Display usage string.
-
-      `--help`
-           Display manual page.
+      `-h`, `--help`
+          Display usage string.
 
     `Operands`
       `OPTIND`
