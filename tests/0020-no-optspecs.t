@@ -50,3 +50,18 @@ test
   N=?
   A=b
 
+  $ tool --foo -b -a -r -baz qux
+  I=4
+  N=?
+  A=a
+
+  $ tool --foo -b -a -r -baz qux
+  I=5
+  N=?
+  A=z
+
+  $ tool --foo -b -a -r -baz qux
+  I=5
+  N=?
+  A=z
+  [1]
