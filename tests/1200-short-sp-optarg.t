@@ -30,6 +30,6 @@ test
 
   $ tool -o lol -w rofl lmao
   I=3
-  N=w
+  N=?
   A=
   [1]

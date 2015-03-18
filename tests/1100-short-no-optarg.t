@@ -31,6 +31,6 @@ test
 
   $ tool -o -w rofl lmao
   I=2
-  N=w
+  N=?
   A=
   [1]

@@ -30,6 +30,6 @@ test
 
   $ tool --omg --wtf rofl lmao
   I=2
-  N=wtf
+  N=?
   A=
   [1]

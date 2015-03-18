@@ -36,10 +36,26 @@
       *option* in the shell parameter named in the `OPTNAME` operand and
       the count of arguments processed so far in the shell parameter named
       in `OPTIND`.
+
       If the name reported in `OPTNAME` requires an *option-argument*
       according to the `OPTSPEC...` list, the shell parameter named in the
       `OPTARG` operand shall contain according value.
       Otherwise, the shell parameter named in `OPTARG` shall be unset.
+
+      If an option not contained in the `OPTSPEC...` list is found where
+      an option is expected, the shell parameter specified by `OPTNAME`
+      shall be set to the <question-mark> ('?') character.
+      Shell parameter given in `OPTARG` shall be set to the option found.
+
+      When the end of options is encountered, the `haveopt` utility shall
+      exit with a return value greater than zero; the shell parameter named
+      in `OPTIND` shall be set to the index of the last option or *option-
+      argument*, or 0 if there are no such arguments;
+      the parameter given in `OPTNAME` shall be set to the `<question-mark>`
+      character. Any of the following shall identify the end of options: the
+      first "--" argument that is not an option-argument, finding an argument
+      that is not an option-argument and does not begin with a '-', or
+      encountering an error.
 
       Note: the shell parameter named in `OPTIND` assumes values that are
       one less than what `getopts` would set `OPTIND` to.  This is for two

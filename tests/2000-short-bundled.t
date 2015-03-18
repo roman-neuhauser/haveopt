@@ -35,6 +35,6 @@ test
 
   $ tool -owl rofl lmao
   I=1
-  N=l
+  N=?
   A=
   [1]

@@ -18,6 +18,6 @@ test
   [1]
   $ dump I N A
   I=0
-  N=
+  N=?
   A=
 

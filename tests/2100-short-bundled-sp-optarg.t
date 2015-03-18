@@ -30,7 +30,7 @@ test
 
   $ tool -bl ow rofl lmao
   I=2
-  N=l
-  A=ow
+  N=?
+  A=
   [1]
 

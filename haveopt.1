@@ -75,6 +75,39 @@ Otherwise, the shell parameter named in
 .Ar OPTARG
 shall be unset.
 .Pp
+If an option not contained in the
+.Ar OPTSPEC Ns ...
+list is found where an option is expected,
+the shell parameter specified by
+.Ar OPTNAME
+shall be set to the
+.Aq Li question-mark
+.Pq Sq Li \&?
+character.
+Shell parameter given in
+.Ar OPTARG
+shall be set to the option found.
+.Pp
+When the end of options is encountered, the
+.Nm
+utility shall exit with a return value greater than zero;
+the shell parameter named in
+.Ar OPTIND
+shall be set to the index of the last option or
+.Em option-argument ,
+or 0 if there are no such arguments;
+the parameter given in
+.Ar OPTNAME
+shall be set to the
+.Aq question-mark
+character.
+Any of the following shall identify the end of options:
+the first "--" argument that is not an
+.Em option-argument ,
+finding an argument that is not an
+.Em option-argument
+and does not begin with a '-', or encountering an error.
+.Pp
 Note: the shell parameter named in
 .Ar OPTIND
 assumes values that are

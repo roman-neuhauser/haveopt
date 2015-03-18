@@ -30,5 +30,5 @@ test
   [1]
   $ dump I N A
   I=0
-  N=bar
-  A=qux
+  N=?
+  A=

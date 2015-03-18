@@ -40,7 +40,7 @@ test
 
   $ tool -blow rofl lmao
   I=1
-  N=w
+  N=?
   A=
   [1]
 

@@ -31,6 +31,6 @@ test
 
   $ tool --omg lol --wtf rofl lmao
   I=3
-  N=wtf
+  N=?
   A=
   [1]

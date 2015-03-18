@@ -208,6 +208,8 @@ haveopt()
   esac
 
   eval "$ip=\$i"
+  eval "$np='?'"
+  eval "$ap="
   unset $cookie
 
   return 1

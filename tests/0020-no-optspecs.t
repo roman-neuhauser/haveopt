@@ -18,7 +18,7 @@ test
   $ I=0 N= A=
   $ tool foo bar baz qux
   I=0
-  N=
+  N=?
   A=
   [1]
 
@@ -63,5 +63,5 @@ test
   $ tool --foo -b -a -r -baz qux
   I=5
   N=?
-  A=z
+  A=
   [1]

@@ -40,7 +40,7 @@ test
 
   $ tool -abcd -cd
   I=2
-  N=d
+  N=?
   A=
   [1]
 
@@ -83,7 +83,7 @@ test
 
   $ tool -cad -dca -badc
   I=3
-  N=b
-  A=adc
+  N=?
+  A=
   [1]
 

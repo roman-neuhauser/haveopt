@@ -40,6 +40,6 @@ test
 
   $ tool --omg --snafu --fubar --wtf rofl lmao
   I=4
-  N=wtf
+  N=?
   A=
   [1]
