@@ -3,39 +3,41 @@
 haveopt()
 {
   # {{{
-  local usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
+  local haveopt_usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
 
   if [ $# -eq 1 ]; then
     case $1 in
-      -h|--help) printf >&2 "$usage" ;;
+      -h|--help) printf >&2 "$haveopt_usage" ;;
     esac
     return 0
   fi
   if [ $# -le 3 ]; then
-    printf >&2 "$usage"
+    printf >&2 "$haveopt_usage"
     return 2
   fi
   if [ $# -eq 4 ] && [ "x$4" != x-- ]; then
-    printf >&2 "$usage"
+    printf >&2 "$haveopt_usage"
     return 2
   fi
   
   # name of the cookie used to store
   # the iterator over bundled short options
-  local cookie="HAVEOPT_shopt_iter__$(printf "%s\0" "$@" | cksum | tr ' ' _)"
+  local haveopt_cookie="HAVEOPT_shopt_iter__$(
+    printf "%s\0" "$@" | cksum | tr ' ' _
+  )"
 
-  local ip="$1" np="$2" ap="$3"; shift 3
+  local haveopt_ip="$1" haveopt_np="$2" haveopt_ap="$3"; shift 3
 
-  local sopts= soptstr= lopts=
+  local haveopt_sopts= haveopt_soptstr= haveopt_lopts=
 
   while [ "x$1" != x-- ]; do
     case "$1" in
     ?=|?)
-      sopts="$sopts $1"
-      soptstr="$soptstr${1%=}"
+      haveopt_sopts="$haveopt_sopts $1"
+      haveopt_soptstr="$haveopt_soptstr${1%=}"
     ;;
     *)
-      lopts="$lopts $1"
+      haveopt_lopts="$haveopt_lopts $1"
     ;;
     esac
     shift
@@ -45,167 +47,172 @@ haveopt()
   shift
   # }}}
 
-  local i
-  eval "i=\"\$$ip\""
-  i=$(expr "$i" : '\([0-9]*\)' \| 0)
+  local haveopt_optind
+  eval "haveopt_optind=\"\$$haveopt_ip\""
+  haveopt_optind=$(expr "$haveopt_optind" : '\([0-9]*\)' \| 0)
 
-  shift $i
+  shift $haveopt_optind
 
-  local arg="${1-}"
-  local opt
-  local optarg
+  local haveopt_arg="${1-}"
+  local haveopt_opt
+  local haveopt_optarg
+  local haveopt_optname
+  local haveopt_needs_optarg=0
 
-  case $arg in
+  case $haveopt_arg in
   --?*)
     # long option {{{
-    for opt in $lopts; do
-      local optname=${opt%=}
-      local needs_optarg=0
-      case "$opt" in
-      *=) needs_optarg=1 ;;
+    for haveopt_opt in $haveopt_lopts; do
+      haveopt_optname=${haveopt_opt%=}
+      haveopt_needs_optarg=0
+      case "$haveopt_opt" in
+      *=) haveopt_needs_optarg=1 ;;
       esac
-      case "$arg" in
-      --$optname=*)
-        i=$(( i + 1 ))
-        optarg="${arg#--$optname=}"
-        eval "$np=\"\$optname\""
-        eval "$ap=\"\$optarg\""
-        eval "$ip=\$i"
+      case "$haveopt_arg" in
+      --$haveopt_optname=*)
+        haveopt_optind=$(( haveopt_optind + 1 ))
+        haveopt_optarg="${haveopt_arg#--$haveopt_optname=}"
+        eval "$haveopt_np=\"\$haveopt_optname\""
+        eval "$haveopt_ap=\"\$haveopt_optarg\""
+        eval "$haveopt_ip=\$haveopt_optind"
         return 0
       ;;
-      --$optname)
-        eval "$np=\"\$optname\""
-        if [ $needs_optarg -ne 0 ]; then
-          i=$(( i + 2 ))
-          eval "$ap=\"\$2\""
+      --$haveopt_optname)
+        eval "$haveopt_np=\"\$haveopt_optname\""
+        if [ $haveopt_needs_optarg -ne 0 ]; then
+          haveopt_optind=$(( haveopt_optind + 2 ))
+          eval "$haveopt_ap=\"\$2\""
         else
-          i=$(( i + 1 ))
-          eval "unset $ap"
+          haveopt_optind=$(( haveopt_optind + 1 ))
+          eval "unset $haveopt_ap"
         fi
-        eval "$ip=\$i"
+        eval "$haveopt_ip=\$haveopt_optind"
         return 0
       ;;
       esac
     done
-    i=$(( i + 1 ))
-    optname="${arg#--}"
-    optname="${optname%%=*}"
-    eval "$ip=\$i"
-    eval "$np=?"
-    eval "$ap=\"\$optname\""
+    haveopt_optind=$(( haveopt_optind + 1 ))
+    haveopt_optname="${haveopt_arg#--}"
+    haveopt_optname="${haveopt_optname%%=*}"
+    eval "$haveopt_ip=\$haveopt_optind"
+    eval "$haveopt_np=?"
+    eval "$haveopt_ap=\"\$haveopt_optname\""
     return
     # }}}
   ;;
   -?)
     # short option {{{
-    for opt in $sopts; do
-      local optname=${opt%=}
-      local needs_optarg=0
-      case "$opt" in
-      *=) needs_optarg=1 ;;
+    for haveopt_opt in $haveopt_sopts; do
+      haveopt_optname=${haveopt_opt%=}
+      haveopt_needs_optarg=0
+      case "$haveopt_opt" in
+      *=) haveopt_needs_optarg=1 ;;
       esac
-      case "$arg" in
-      -$optname)
+      case "$haveopt_arg" in
+      -$haveopt_optname)
         # i'm torn: brevity or side-by-side view?
-        if [ $needs_optarg -ne 0 ]; then
-          i=$(( i + 2 ))
-          optarg="$2"
-          eval "$ap=\"\$2\""
+        if [ $haveopt_needs_optarg -ne 0 ]; then
+          haveopt_optind=$(( haveopt_optind + 2 ))
+          haveopt_optarg="$2"
+          eval "$haveopt_ap=\"\$2\""
         else
-          i=$(( i + 1 ))
-          eval "unset $ap"
+          haveopt_optind=$(( haveopt_optind + 1 ))
+          eval "unset $haveopt_ap"
         fi
-        eval "$ip=\$i"
-        eval "$np=\"\$optname\""
+        eval "$haveopt_ip=\$haveopt_optind"
+        eval "$haveopt_np=\"\$haveopt_optname\""
         # no cookie
         return 0
       ;;
       esac
     done
-    i=$(( i + 1 ))
-    optname="${arg#-}"
-    eval "$ip=\$i"
-    eval "$np=?"
-    eval "$ap=\"\$optname\""
+    haveopt_optind=$(( haveopt_optind + 1 ))
+    haveopt_optname="${haveopt_arg#-}"
+    eval "$haveopt_ip=\$haveopt_optind"
+    eval "$haveopt_np=?"
+    eval "$haveopt_ap=\"\$haveopt_optname\""
     return
     # }}}
   ;;
   -??*)
     # bundle of short options {{{
-    local bit
-    eval "bit=\"\${$cookie:-0}\""
+    local haveopt_bit
+    eval "haveopt_bit=\"\${$haveopt_cookie:-0}\""
 
-    local prev="$(printf "%${bit}s" '' | tr ' ' '?')"
-    arg="-${arg#-$prev}"
+    haveopt_arg="-${haveopt_arg#-$(
+      printf "%${haveopt_bit}s" '' | tr ' ' '?'
+    )}"
 
-    for opt in $sopts; do # {{{
-      local optname=${opt%=}
-      local needs_optarg=0
-      case "$opt" in
-      *=) needs_optarg=1 ;;
+    for haveopt_opt in $haveopt_sopts; do # {{{
+      haveopt_optname=${haveopt_opt%=}
+      haveopt_needs_optarg=0
+      case "$haveopt_opt" in
+      *=) haveopt_needs_optarg=1 ;;
       esac
-      case "$arg" in
-      -$optname)
+      case "$haveopt_arg" in
+      -$haveopt_optname)
         # last option in the bundle
-        bit=0
-        if [ $needs_optarg -ne 0 ]; then
-          i=$(( i + 2 ))
-          eval "$ap=\"\$2\""
+        haveopt_bit=0
+        if [ $haveopt_needs_optarg -ne 0 ]; then
+          haveopt_optind=$(( haveopt_optind + 2 ))
+          eval "$haveopt_ap=\"\$2\""
         else
-          i=$(( i + 1 ))
-          eval "unset $ap"
+          haveopt_optind=$(( haveopt_optind + 1 ))
+          eval "unset $haveopt_ap"
         fi
-        eval "$ip=\$i"
-        eval "$np=\"\$optname\""
-        eval "$cookie=\$bit"
+        eval "$haveopt_ip=\$haveopt_optind"
+        eval "$haveopt_np=\"\$haveopt_optname\""
+        eval "$haveopt_cookie=\$haveopt_bit"
         return
       ;;
-      -$optname?*)
+      -$haveopt_optname?*)
         # *not* the last option in the bundle
-        # *or* a stuck optarg
-        bit=$(( bit + 1 ))
-        if [ $needs_optarg -ne 0 ]; then
-          # stuck optarg
-          bit=0
-          eval "$ap=\"\${arg#-?}\""
-          i=$(( i + 1 ))
+        # *or* a stuck haveopt_optarg
+        haveopt_bit=$(( haveopt_bit + 1 ))
+        if [ $haveopt_needs_optarg -ne 0 ]; then
+          # stuck haveopt_optarg
+          haveopt_bit=0
+          eval "$haveopt_ap=\"\${haveopt_arg#-?}\""
+          haveopt_optind=$(( haveopt_optind + 1 ))
         else
-          eval "unset $ap"
+          eval "unset $haveopt_ap"
         fi
-        eval "$ip=\$i"
-        eval "$np=\"\$optname\""
-        eval "$cookie=\$bit"
+        eval "$haveopt_ip=\$haveopt_optind"
+        eval "$haveopt_np=\"\$haveopt_optname\""
+        eval "$haveopt_cookie=\$haveopt_bit"
         return
       ;;
       esac
     done # }}}
 
-    optname="${arg#-}"
-    case $optname in
+    haveopt_optname="${haveopt_arg#-}"
+    case $haveopt_optname in
     ?)
-      bit=0
-      i=$(( i + 1 ))
+      haveopt_bit=0
+      haveopt_optind=$(( haveopt_optind + 1 ))
     ;;
     *)
-      local tail tlen=$(( ${#optname} - 1 ))
-      tail="$(printf "%${tlen}s" '' | tr ' ' '?')"
-      optname="${optname%$tail}"
-      bit=$(( bit + 1 ))
+      local haveopt_tail haveopt_tlen=$(( ${#haveopt_optname} - 1 ))
+      haveopt_tail="$(
+        printf "%${haveopt_tlen}s" '' | tr ' ' '?'
+      )"
+      haveopt_optname="${haveopt_optname%$haveopt_tail}"
+      haveopt_bit=$(( haveopt_bit + 1 ))
     ;;
     esac
-    eval "$ip=\$i"
-    eval "$np=?"
-    eval "$ap=\"\$optname\""
-    eval "$cookie=\$bit"
+    eval "$haveopt_ip=\$haveopt_optind"
+    eval "$haveopt_np=?"
+    eval "$haveopt_ap=\"\$haveopt_optname\""
+    eval "$haveopt_cookie=\$haveopt_bit"
     return
     # }}}
   ;;
   esac
 
-  eval "$ip=\$i"
-  eval "$np='?'"
-  eval "unset $ap"
-  unset $cookie
+  eval "$haveopt_ip=\$haveopt_optind"
+  eval "$haveopt_np='?'"
+  eval "unset $haveopt_ap"
+  unset $haveopt_cookie
 
   return 1
 }

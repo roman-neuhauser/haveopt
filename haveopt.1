@@ -174,7 +174,15 @@ requires an
 .Em option-argument ,
 .Ar OPTSPEC
 should end with
-.Dq Li = .
+.Ql = .
+.Pp
+Applications shall make sure that parameter names passed in the
+.Ar OPTIND ,
+.Ar OPTNAME
+and
+.Ar OPTARG
+operands do not begin with
+.Qq Li haveopt_ .
 .El
 .\" }}}
 .
