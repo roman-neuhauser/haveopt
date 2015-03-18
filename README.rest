@@ -130,7 +130,7 @@
         printf "Remaining arguments are: %s\\n" "$*"
 
   `SEE ALSO`
-      autoconf(1), make(1), sh(1).
+      getopt(1), getopts(1), sh(1).
 
   `STANDARDS`
       “IEEE Std 1003.1-2008/Cor 1-2013” aka “POSIX.1-2008”
