@@ -89,7 +89,7 @@ haveopt()
           eval "$ap=\"\$2\""
         else
           i=$(( i + 1 ))
-          eval "$ap="
+          eval "unset $ap"
         fi
         eval "$ip=\$i"
         return 0
@@ -119,13 +119,13 @@ haveopt()
         if [ $needs_optarg -ne 0 ]; then
           i=$(( i + 2 ))
           optarg="$2"
+          eval "$ap=\"\$2\""
         else
           i=$(( i + 1 ))
-          optarg=
+          eval "unset $ap"
         fi
         eval "$ip=\$i"
         eval "$np=\"\$optname\""
-        eval "$ap=\"\$optarg\""
         # no cookie
         return 0
       ;;
@@ -159,14 +159,13 @@ haveopt()
         bit=0
         if [ $needs_optarg -ne 0 ]; then
           i=$(( i + 2 ))
-          optarg="$2"
+          eval "$ap=\"\$2\""
         else
           i=$(( i + 1 ))
-          optarg=
+          eval "unset $ap"
         fi
         eval "$ip=\$i"
         eval "$np=\"\$optname\""
-        eval "$ap=\"\$optarg\""
         eval "$cookie=\$bit"
         return
       ;;
@@ -177,14 +176,13 @@ haveopt()
         if [ $needs_optarg -ne 0 ]; then
           # stuck optarg
           bit=0
-          optarg="${arg#-?}"
+          eval "$ap=\"\${arg#-?}\""
           i=$(( i + 1 ))
         else
-          optarg=
+          eval "unset $ap"
         fi
         eval "$ip=\$i"
         eval "$np=\"\$optname\""
-        eval "$ap=\"\$optarg\""
         eval "$cookie=\$bit"
         return
       ;;
@@ -215,7 +213,7 @@ haveopt()
 
   eval "$ip=\$i"
   eval "$np='?'"
-  eval "$ap="
+  eval "unset $ap"
   unset $cookie
 
   return 1

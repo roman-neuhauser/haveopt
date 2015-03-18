@@ -10,9 +10,12 @@ tool()
 
 dump()
 {
-  local var val
+  # the isset trickery serves to distinguish between
+  # set-and-empty vs unset parameters.
+  local isset var val
   for var; do
     eval val="\"\$$var\""
-    printf "%s=%s\n" "$var" "$val"
+    eval "isset=\${$var+<empty>}"
+    printf "%s=%s\n" "$var" "${val:-$isset}"
   done
 }
