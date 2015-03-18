@@ -8,18 +8,13 @@ setup
 
   $ . $TESTDIR/setup
 
+  $ channels='I N A'
+  $ optspecs='a b= c d'
+
 test
 ****
 
 ::
-
-  $ tool()
-  > {
-  >   local ex=0
-  >   haveopt I N A a b= c d -- "$@" || ex=$?
-  >   dump I N A
-  >   return $ex
-  > }
 
   $ I=0 N= A=
 

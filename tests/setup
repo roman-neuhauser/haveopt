@@ -1,5 +1,13 @@
 . haveopt.sh
 
+tool()
+{
+  local ex=0 p="$channels" os="$optspecs"
+  haveopt $p $os -- "$@" || ex=$?
+  dump $p
+  return $ex
+}
+
 dump()
 {
   local var val

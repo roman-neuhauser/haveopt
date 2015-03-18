@@ -8,31 +8,29 @@ setup
 
   $ . $TESTDIR/setup
 
+  $ channels='I N A'
+  $ optspecs='b l='
+
 test
 ****
 
 ::
 
-  $ set I N A b l= -- -blow rofl lmao
-
   $ I=0 N= A=
 
-  $ haveopt "$@"
-  $ dump I N A
+  $ tool -blow rofl lmao
   I=0
   N=b
   A=
 
-  $ haveopt "$@"
-  $ dump I N A
+  $ tool -blow rofl lmao
   I=1
   N=l
   A=ow
 
-  $ haveopt "$@"
-  [1]
-  $ dump I N A
+  $ tool -blow rofl lmao
   I=1
   N=l
   A=ow
+  [1]
 
