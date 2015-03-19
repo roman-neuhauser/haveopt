@@ -61,6 +61,10 @@ haveopt()
   local haveopt_needs_optarg=0
 
   case $haveopt_arg in
+  --)
+    haveopt_optind=$(( haveopt_optind + 1 ))
+    break
+  ;;
   --?*)
     # long option {{{
     for haveopt_opt in $haveopt_lopts; do
