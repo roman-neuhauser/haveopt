@@ -52,6 +52,8 @@ haveopt()
   eval "haveopt_optind=\"\$$haveopt_ip\""
   haveopt_optind=$(expr "$haveopt_optind" : '\([0-9]*\)' \| 0)
 
+  # remove already-processed arguments
+  # so that we always work with $1
   shift $haveopt_optind
 
   local haveopt_arg="${1-}"
@@ -144,11 +146,14 @@ haveopt()
     local haveopt_bit
     eval "haveopt_bit=\"\${$haveopt_cookie:-0}\""
 
+    # remove already-scanned characters on the left {{{
     haveopt_arg="-${haveopt_arg#-$(
       printf "%${haveopt_bit}s" '' | tr ' ' '?'
     )}"
+    # }}}
 
-    for haveopt_opt in $haveopt_sopts; do # {{{
+    # is the current character a known option? {{{
+    for haveopt_opt in $haveopt_sopts; do
       haveopt_optname=${haveopt_opt%=}
       haveopt_needs_optarg=0
       case "$haveopt_opt" in
@@ -190,6 +195,7 @@ haveopt()
       esac
     done # }}}
 
+    # no, it's none of the known options {{{
     haveopt_optname="${haveopt_arg#-}"
     case $haveopt_optname in
     ?)
@@ -211,9 +217,11 @@ haveopt()
     eval "$haveopt_cookie=\$haveopt_bit"
     return
     # }}}
+    # }}}
   ;;
   esac
 
+  # not an option or option-bundle
   eval "$haveopt_ip=\$haveopt_optind"
   eval "$haveopt_np='?'"
   eval "unset $haveopt_ap"
