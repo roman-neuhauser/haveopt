@@ -92,7 +92,7 @@
          requires an *option-argument*, `OPTSPEC` should end with “=”.
 
       Applications shall make sure that parameter names passed in the `OPTIND`,
-      `OPTNAME` and `OPTARG` operands do not begin with "haveopt_".
+      `OPTNAME` and `OPTARG` operands do not begin with "haveopt\_".
 
   `FILES`
       `haveopt.sh` must be in `$PATH` for this to work.
