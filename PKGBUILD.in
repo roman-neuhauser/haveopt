@@ -7,7 +7,7 @@ arch=(any)
 url="https://github.com/roman-neuhauser/$pkgname"
 license=(MIT)
 depends=()
-checkdepends=(cram sh)
+checkdepends=(cram)
 source=($pkgname-$pkgver.tar.gz)
 sha1sums=(SKIP)
 
