@@ -5,12 +5,10 @@
 .. :Copyright: This document is in the public domain.
 
 .. this file is marked up using reStructuredText
-   lines beginning with ".." are reST directives
-   "foo_" or "`foo bar`_" is a link, defined at ".. _foo" or ".. _foo bar"
-   "::" introduces a literal block (usually some form of code)
-   "`foo`" is some kind of identifier
-   suspicious backslashes in the text ("`std::string`\s") are required for
-   reST to recognize the preceding character as syntax
+.. lines beginning with ".." are reST directives
+.. backslashes in the text serve one of two purposes:
+.. - to recognize the *preceding* character as syntax ("`std::string`\s"),
+.. - to not treat the *following* character as syntax ("haveopt\_")
 
 .. default-role:: strong
 .. parsed-literal::
