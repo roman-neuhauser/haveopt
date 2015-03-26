@@ -7,7 +7,7 @@ haveopt()
 
   if [ $# -eq 1 ]; then
     case $1 in
-      -h|--help) printf >&2 "$haveopt_usage" ;;
+      -h|--help) printf "$haveopt_usage" ;;
     esac
     return 0
   fi
