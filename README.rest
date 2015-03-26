@@ -71,6 +71,8 @@
 
         . haveopt.sh
 
+      `haveopt.sh` must be in `$PATH` for this to work.
+
     `Options`
       `-h`, `--help`
           Display usage string.
@@ -91,9 +93,6 @@
 
       Applications shall make sure that parameter names passed in the `OPTIND`,
       `OPTNAME` and `OPTARG` operands do not begin with "haveopt\_".
-
-  `FILES`
-      `haveopt.sh` must be in `$PATH` for this to work.
 
   `EXIT STATUS`
       The `haveopt` utility exits 0 on success, and >0 if an error occurs.

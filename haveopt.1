@@ -140,7 +140,12 @@ is implemented as a
 function, loaded into a shell process with
 .Bd -literal
   . haveopt.sh
+
 .Ed
+.Pa haveopt.sh
+must be in
+.Ev $PATH
+for this to work.
 .
 .Ss Options
 .Bl -tag -width "xx"
@@ -187,11 +192,7 @@ operands do not begin with
 .\" }}}
 .
 .\" FILES {{{
-.Sh FILES
-.Pa haveopt.sh
-must be in
-.Ev $PATH
-for this to work.
+.\" .Sh FILES
 .\" }}}
 .
 .\" EXIT STATUS {{{
