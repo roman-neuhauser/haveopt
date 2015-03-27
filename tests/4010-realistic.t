@@ -33,7 +33,6 @@ test
   suppress column 1 (lines unique to FILE1)
   suppress column 2 (lines unique to FILE2)
   suppress column 3 (lines that appear in both files)
-  suppress column 3 (lines that appear in both files)
   operands (2):
    - file.v1
    - file.v2

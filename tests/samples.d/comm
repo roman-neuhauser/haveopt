@@ -6,7 +6,7 @@ pretend_comm()
   while haveopt i opt arg 1 2 3 -- "$@"; do
   case $opt in
   1|2) printf "suppress column %d (lines unique to FILE%d)\n" $opt $opt ;;
-  3)   printf "suppress column %d (lines that appear in both files)\n" $opt $opt ;;
+  3)   printf "suppress column %d (lines that appear in both files)\n" $opt ;;
   *)   printf "error: unknown option %s\n" "$arg"; return 1 ;;
   esac
   done; shift $i
