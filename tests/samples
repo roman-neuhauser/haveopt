@@ -1,0 +1,20 @@
+# vim: ft=sh et sts=2 sw=2 fdm=marker cms=\ #\ %s
+
+pretend() # {{{
+{
+  local role="$1"; shift
+  pretend_$role "$@"
+} # }}}
+
+report_operands() # {{{
+{
+  if [ $# -eq 0 ]; then
+    printf "no operands\n"
+  else
+    printf "operands (%d):\n" "$#"
+    printf " - %s\n" "$@"
+  fi
+} # }}}
+
+. $TESTDIR/samples.d/bsdtar
+. $TESTDIR/samples.d/comm

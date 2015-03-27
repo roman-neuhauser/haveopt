@@ -1,0 +1,91 @@
+# vim: ft=sh et sts=2 sw=2 fdm=marker cms=\ #\ %s
+
+pretend_bsdtar()
+{
+  # process options {{{
+  local mode
+  case $1 in
+  -c*|--create)  mode=c ;;
+  -r*|--append)  mode=r ;;
+  -t*|--list)    mode=t ;;
+  -u*|--update)  mode=u ;;
+  -x*|--extract) mode=x ;;
+  -*) printf >&2 "error: invalid mode\n"; return 1 ;;
+  esac
+
+  local first
+  case $1 in
+  -?|--*) shift ;;
+  -??*)
+    first="$1"
+    shift
+    set -- "-${first#-?}" "$@"
+  ;;
+  esac
+
+  local autocompress=0 chroot=0 file=/dev/sa0 dir=
+
+  local i name arg options="
+    a auto-compress
+    C= cd= directory=
+    chroot
+    f= file=
+  "
+  while haveopt i name arg $options -- "$@"; do
+  case $name in
+  a|auto-compress)
+    if [ $mode != c ]; then
+      printf >&2 "error: auto-compress only works with create mode\n"
+      return 1
+    fi
+    autocompress=1
+  ;;
+  C|cd|directory)
+    dir="$arg"
+  ;;
+  chroot)
+    if [ $mode != x ]; then
+      printf >&2 "error: --chroot only works with extract mode\n"
+      return 1
+    fi
+    chroot=1
+  ;;
+  f|file)
+    file="$arg"
+  ;;
+  esac
+  done
+  # drop options and optargs from $*
+  shift $i
+  # }}}
+
+  # action {{{
+  case $mode in
+  c)
+    printf "create archive %s\n" "$file"
+    if [ -n $directory ]; then
+      printf " - from operands found in %s\n" "${dir%/}/"
+    fi
+    if [ $autocompress -ne 0 ]; then
+      printf " - infer compression from archive filename\n"
+    fi
+  ;;
+  r|u)
+    printf "append to archive %s\n" "$file"
+    if [ $mode = u ]; then
+      printf " - modified files\n"
+    fi
+  ;;
+  t)
+    printf "list contents of archive %s\n" "$file"
+  ;;
+  x)
+    printf "extract from %s\n" "$file"
+    if [ $chroot -ne 0 ]; then
+      printf " - chrooted into %s\n" "${dir:-current directory}"
+    fi
+  ;;
+  esac
+  report_operands "$@"
+  # }}}
+}

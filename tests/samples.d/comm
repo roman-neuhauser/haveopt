@@ -1,0 +1,15 @@
+# vim: ft=sh et sts=2 sw=2 fdm=marker cms=\ #\ %s
+
+pretend_comm()
+{
+  local i opt arg
+  while haveopt i opt arg 1 2 3 -- "$@"; do
+  case $opt in
+  1|2) printf "suppress column %d (lines unique to FILE%d)\n" $opt $opt ;;
+  3)   printf "suppress column %d (lines that appear in both files)\n" $opt $opt ;;
+  *)   printf "error: unknown option %s\n" "$arg"; return 1 ;;
+  esac
+  done; shift $i
+
+  report_operands "$@"
+}
