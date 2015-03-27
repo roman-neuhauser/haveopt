@@ -206,20 +206,20 @@ This example demonstrates both short and long options,
 each with and without an
 .Em option-argument :
 .Bd -literal -offset "xx"
-OPTIND=0
 o_compression=gzip
 o_filesfrom=
-while haveopt OPTIND name OPTARG J xz T= files-from= -- "$@"
+i=0
+while haveopt i opt arg J xz T= files-from= -- "$@"
 do
-  case $name in
+  case $opt in
   J|xz)
     o_compression=xz
   ;;
   T|files-from)
-    o_filesfrom="$OPTARG"
+    o_filesfrom="$arg"
   ;;
   ?)
-    printf "Usage: %s: [options] operands\\n" $0
+    printf "Usage: %s: [-J|--xz] [-T FILE|--files-from=FILE] operands\\n" $0
     exit 2
   ;;
   esac
@@ -228,7 +228,7 @@ printf "Use %s (de)compression\\n" "$o_compression"
 if [ ! -z "$o_filesfrom" ]; then
   printf 'Get pathnames to extract from "%s"\\n' "$o_filesfrom"
 fi
-shift $OPTIND
+shift $i
 printf "Remaining arguments are: %s\\n" "$*"
 .Ed
 .\" }}}
