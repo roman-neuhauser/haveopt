@@ -147,7 +147,7 @@ haveopt()
 
     # remove already-scanned characters on the left {{{
     haveopt_arg="-${haveopt_arg#-$(
-      printf "%${haveopt_bit}s" '' | tr ' ' '?'
+      [ $haveopt_bit -eq 0 ] || printf "%${haveopt_bit}s" '' | tr ' ' '?'
     )}"
     # }}}
 
