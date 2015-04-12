@@ -65,7 +65,6 @@ haveopt()
   case $haveopt_arg in
   --)
     haveopt_optind=$(( haveopt_optind + 1 ))
-    break
   ;;
   --?*)
     # long option {{{
