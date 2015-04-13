@@ -170,6 +170,10 @@
           *option-arguments* behind one '-' delimiter, then it is treated
           as such.
 
+  `LICENSE`
+      MIT
+          https://github.com/roman-neuhauser/haveopt/blob/master/LICENSE
+
   `AUTHORS`
       Roman Neuhauser <neuhauser+haveopt@sigpipe.cz>
           https://github.com/roman-neuhauser/haveopt/
