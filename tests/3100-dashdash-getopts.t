@@ -8,8 +8,6 @@ setup
 
   $ . $TESTDIR/setup
 
-  $ tool=getopts
-
 test
 ****
 
@@ -17,16 +15,19 @@ test
 
   $ OPTIND=1
 
-  $ tool abc -a -b -- -c
-  I=2
-  N=a
-  A=
-  $ tool abc -a -b -- -c
-  I=3
-  N=b
-  A=
-  $ tool abc -a -b -- -c
-  I=4
-  N=?
-  A=
+  $ getopts abc OPTNAM -a -b -- -c
+  $ dump OPTIND OPTNAM OPTARG
+  OPTIND=2
+  OPTNAM=a
+  OPTARG=(<empty>)? (re)
+  $ getopts abc OPTNAM -a -b -- -c
+  $ dump OPTIND OPTNAM OPTARG
+  OPTIND=3
+  OPTNAM=b
+  OPTARG=(<empty>)? (re)
+  $ getopts abc OPTNAM -a -b -- -c
   [1]
+  $ dump OPTIND OPTNAM OPTARG
+  OPTIND=4
+  OPTNAM=?
+  OPTARG=(<empty>)? (re)

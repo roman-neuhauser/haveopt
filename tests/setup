@@ -2,17 +2,10 @@
 
 tool()
 {
-  if [ "x$tool" = xgetopts ]; then
-    local ex=0 name OPTARG optspec="$1"; shift
-    getopts "$optspec" name "$@" || ex=$?
-    printf "I=%d\nN=%s\nA=%s\n" $OPTIND "$name" "$OPTARG"
-    return $ex
-  else
-    local ex=0 p="${channels-}" os="${optspecs-}"
-    haveopt $p $os -- "$@" || ex=$?
-    dump $p
-    return $ex
-  fi
+  local ex=0
+  haveopt "$@" || ex=$?
+  dump "$1" "$2" "$3"
+  return $ex
 }
 
 dump()

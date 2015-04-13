@@ -8,9 +8,6 @@ setup
 
   $ . $TESTDIR/setup
 
-  $ channels='I N A'
-  $ optspecs='b o w'
-
 test
 ****
 
@@ -18,27 +15,27 @@ test
 
   $ I=0 N= A=
 
-  $ tool -blow rofl lmao
+  $ tool I N A b o w -- -blow rofl lmao
   I=0
   N=b
   A=
 
-  $ tool -blow rofl lmao
+  $ tool I N A b o w -- -blow rofl lmao
   I=0
   N=?
   A=l
 
-  $ tool -blow rofl lmao
+  $ tool I N A b o w -- -blow rofl lmao
   I=0
   N=o
   A=
 
-  $ tool -blow rofl lmao
+  $ tool I N A b o w -- -blow rofl lmao
   I=1
   N=w
   A=
 
-  $ tool -blow rofl lmao
+  $ tool I N A b o w -- -blow rofl lmao
   I=1
   N=?
   A=
