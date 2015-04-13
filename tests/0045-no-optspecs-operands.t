@@ -16,15 +16,6 @@ test
 ::
 
   $ I=0 N= A=
-  $ tool foo bar baz qux
-  I=0
-  N=?
-  A=
-  [1]
-
-::
-
-  $ I=0 N= A=
   $ tool --foo -b -a -r -baz qux
   I=1
   N=?

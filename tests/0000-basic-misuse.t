@@ -24,11 +24,3 @@ test
   I=
   N=
   A=
-
-  $ I=foo N=bar A=qux
-  $ haveopt I N A --
-  [1]
-  $ dump I N A
-  I=0
-  N=?
-  A=
