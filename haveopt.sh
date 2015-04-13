@@ -26,7 +26,19 @@ haveopt()
     printf "%s\0" "$@" | cksum | tr ' ' _
   )"
 
-  local haveopt_ip="$1" haveopt_np="$2" haveopt_ap="$3"; shift 3
+  local haveopt_name
+  for haveopt_name in "$1" "$2" "$3"; do
+    case $haveopt_name in
+    # posh does not implement [:class:] syntax yet
+    [!_a-zA-Z]*     |\
+    *[!_a-zA-Z0-9]* )
+      printf >&2 "haveopt: invalid identifier: %s\n" "$haveopt_name"
+      return 2
+    ;;
+    esac
+  done
+  local haveopt_ip="$1" haveopt_np="$2" haveopt_ap="$3"
+  shift 3
 
   local haveopt_sopts= haveopt_soptstr= haveopt_lopts=
 
