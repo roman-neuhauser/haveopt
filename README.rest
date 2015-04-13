@@ -170,6 +170,9 @@
           *option-arguments* behind one '-' delimiter, then it is treated
           as such.
 
+  `COMPATIBILITY`
+      haveopt is tested with bash(1), dash(1), mksh(1), posh(1).
+
   `LICENSE`
       MIT
           https://github.com/roman-neuhauser/haveopt/blob/master/LICENSE
