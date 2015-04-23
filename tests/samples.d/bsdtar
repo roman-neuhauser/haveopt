@@ -25,13 +25,14 @@ pretend_bsdtar()
 
   local autocompress=0 chroot=0 file=/dev/sa0 dir=
 
-  local i name arg options="
-    a auto-compress
-    C= cd= directory=
-    chroot
-    f= file=
-  "
-  while haveopt i name arg $options -- "$@"; do
+  local i name arg
+  while haveopt i name arg \
+    a auto-compress \
+    C= cd= directory= \
+    chroot \
+    f= file= \
+    -- "$@"
+  do
   case $name in
   a|auto-compress)
     if [ $mode != c ]; then
