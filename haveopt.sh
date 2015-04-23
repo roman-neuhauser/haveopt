@@ -2,6 +2,14 @@
 
 haveopt()
 {
+  if [ "x${ZSH_VERSION+set}" = xset ]; then
+    # zsh is normally too different from posixish shells
+    # `local_options` limits the effect of the `emulate`
+    # command to the surrounding function (ie, haveopt).
+    emulate -R sh
+    setopt local_options
+  fi
+
   # configuration {{{
   local haveopt_usage='usage: haveopt IND OPT ARG [OPTSPEC...] -- "$@"\n'
 
