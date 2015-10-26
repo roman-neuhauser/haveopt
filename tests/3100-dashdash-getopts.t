@@ -6,6 +6,7 @@ setup
 
 ::
 
+  $ test "${ZSH_VERSION-unset}" = unset || exit 80
   $ . $TESTDIR/setup
 
 test
