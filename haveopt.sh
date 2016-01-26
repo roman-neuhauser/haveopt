@@ -49,9 +49,17 @@ haveopt()
   shift 3
 
   local haveopt_sopts= haveopt_soptstr= haveopt_lopts=
+  local haveopt_argv_sep_seen=0
 
-  while [ "x$1" != x-- ]; do
+  while [ $# -gt 0 ]; do
     case "$1" in
+    --)
+      haveopt_argv_sep_seen=1
+      # remove the '--' optspeclist terminator
+      # leaving the actual args in $@
+      shift
+      break
+    ;;
     ?=|?)
       haveopt_sopts="$haveopt_sopts $1"
       haveopt_soptstr="$haveopt_soptstr${1%=}"
@@ -62,9 +70,11 @@ haveopt()
     esac
     shift
   done
-  # remove the '--' optspeclist terminator
-  # leaving the actual args in $@
-  shift
+
+  if [ $haveopt_argv_sep_seen -eq 0 ]; then
+    printf >&2 "$haveopt_usage"
+    return 2
+  fi
   # }}}
 
   # one shot {{{
