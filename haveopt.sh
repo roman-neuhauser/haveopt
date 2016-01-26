@@ -114,15 +114,23 @@ haveopt()
         return 0
       ;;
       --$haveopt_optname)
-        eval "$haveopt_np=\"\$haveopt_optname\""
         if [ $haveopt_needs_optarg -ne 0 ]; then
-          haveopt_optind=$(( haveopt_optind + 2 ))
-          eval "$haveopt_ap=\"\$2\""
+          if [ $# -gt 1 ]; then
+            haveopt_optind=$(( haveopt_optind + 2 ))
+            haveopt_optarg="$2"
+            eval "$haveopt_ap=\"\$2\""
+          else
+            haveopt_optind=$(( haveopt_optind + 1 ))
+            haveopt_optarg="$haveopt_optname"
+            haveopt_optname=:
+            eval "$haveopt_ap=\"\$haveopt_optarg\""
+          fi
         else
           haveopt_optind=$(( haveopt_optind + 1 ))
           eval "unset $haveopt_ap"
         fi
         eval "$haveopt_ip=\$haveopt_optind"
+        eval "$haveopt_np=\"\$haveopt_optname\""
         return 0
       ;;
       esac
@@ -148,9 +156,16 @@ haveopt()
       -$haveopt_optname)
         # i'm torn: brevity or side-by-side view?
         if [ $haveopt_needs_optarg -ne 0 ]; then
-          haveopt_optind=$(( haveopt_optind + 2 ))
-          haveopt_optarg="$2"
-          eval "$haveopt_ap=\"\$2\""
+          if [ $# -gt 1 ]; then
+            haveopt_optind=$(( haveopt_optind + 2 ))
+            haveopt_optarg="$2"
+            eval "$haveopt_ap=\"\$2\""
+          else
+            haveopt_optind=$(( haveopt_optind + 1 ))
+            haveopt_optarg="$haveopt_optname"
+            haveopt_optname=:
+            eval "$haveopt_ap=\"\$haveopt_optarg\""
+          fi
         else
           haveopt_optind=$(( haveopt_optind + 1 ))
           eval "unset $haveopt_ap"
@@ -193,8 +208,16 @@ haveopt()
         # last option in the bundle
         haveopt_bit=0
         if [ $haveopt_needs_optarg -ne 0 ]; then
-          haveopt_optind=$(( haveopt_optind + 2 ))
-          eval "$haveopt_ap=\"\$2\""
+          if [ $# -gt 1 ]; then
+            haveopt_optind=$(( haveopt_optind + 2 ))
+            haveopt_optarg="$2"
+            eval "$haveopt_ap=\"\$2\""
+          else
+            haveopt_optind=$(( haveopt_optind + 1 ))
+            haveopt_optarg="$haveopt_optname"
+            haveopt_optname=:
+            eval "$haveopt_ap=\"\$haveopt_optarg\""
+          fi
         else
           haveopt_optind=$(( haveopt_optind + 1 ))
           eval "unset $haveopt_ap"
