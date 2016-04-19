@@ -63,10 +63,10 @@ tarball: .git
 %.html: %.rest
 	$(RST2HTML) --strict $< $@
 
-$(name).spec: $(name).spec.in
+$(name).spec: p/$(name).spec.in
 	$(call subst_version,^Version:)
 
-PKGBUILD: PKGBUILD.in
+PKGBUILD: p/PKGBUILD.in
 	$(call subst_version,^pkgver=)
 
 define subst_version
