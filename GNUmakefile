@@ -5,9 +5,10 @@ BINDIR         ?= $(PREFIX)/bin
 MANDIR         ?= $(PREFIX)/share/man
 MAN1DIR        ?= $(MANDIR)/man1
 
+srcdir          = $(dir $(firstword $(MAKEFILE_LIST)))
+
 CRAMCMD         = cram
 
-GZIPCMD        ?= gzip
 INSTALL_DATA   ?= install -m 644
 INSTALL_DIR    ?= install -m 755 -d
 INSTALL_SCRIPT ?= install -m 755
@@ -17,8 +18,8 @@ PATH            = /usr/bin:/bin:/usr/sbin:/sbin
 
 name            = haveopt
 
-installed       = $(name).1.gz $(name).sh
-artifacts       = $(name).1.gz README.html PKGBUILD $(name).spec
+installed       = $(name).sh
+artifacts       = $(installed) README.html PKGBUILD $(name).spec
 
 revname         = $(shell git describe --always --first-parent)
 
@@ -49,7 +50,7 @@ install: $(installed)
 	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
 	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
 	$(INSTALL_SCRIPT) $(name).sh $(DESTDIR)$(BINDIR)/$(name).sh
-	$(INSTALL_DATA) $(name).1.gz $(DESTDIR)$(MAN1DIR)/$(name).1.gz
+	$(INSTALL_DATA) $(srcdir)/m/$(name).1 $(DESTDIR)$(MAN1DIR)/$(name).1
 
 .PHONY: tarball
 tarball: .git
@@ -58,8 +59,6 @@ tarball: .git
 	  --prefix $(name)-$(fix_version)/ \
 	  --output $(name)-$(fix_version).tar.gz \
 	  HEAD
-%.gz: %
-	$(GZIPCMD) -cn $< | tee $@ >/dev/null
 
 %.html: %.rest
 	$(RST2HTML) --strict $< $@
