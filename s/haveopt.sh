@@ -1,4 +1,12 @@
+#!/bin/sh
 # vim: ft=sh ts=2 sts=2 sw=2 et fdm=marker cms=\ #\ %s
+
+if [ "x${0##*/}" = xhaveopt.sh ]; then
+  if [ -z "$ZSH_EVAL_CONTEXT" ] || [ "$ZSH_EVAL_CONTEXT" = toplevel ]; then
+    echo >&2 "$0 is meant to be sourced, not executed"
+    exit 2
+  fi
+fi
 
 haveopt()
 {
