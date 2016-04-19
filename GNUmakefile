@@ -27,6 +27,9 @@ revname         = $(shell git describe --always --first-parent)
 .PHONY: all
 all: $(artifacts)
 
+$(name).sh: s/$(name).sh
+	$(INSTALL_SCRIPT) $< $@
+
 .PHONY: most
 most: $(installed)
 
