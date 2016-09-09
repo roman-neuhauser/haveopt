@@ -1,0 +1,6 @@
+haveopt is a sh(1)-compatible argument parser similar to getopts with
+added support for long options, as in GNU getopt(1).  Like the POSIX
+getopts, haveopt allows for options requiring option-arguments.  Unlike
+GNU getopt, haveopt does not permit optional option-arguments.
+
+WWW: https://github.com/roman-neuhauser/haveopt

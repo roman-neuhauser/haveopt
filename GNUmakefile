@@ -61,11 +61,29 @@ tarball: .git
 %.html: %.rest
 	$(RST2HTML) --strict $< $@
 
+.PHONY: pkg-SUSE
+pkg-SUSE: $(name).spec
+
 $(name).spec: p/$(name).spec.in
 	$(call subst_version,^Version:)
 
+.PHONY: pkg-ArchLinux
+pkg-ArchLinux: PKGBUILD
+
 PKGBUILD: p/PKGBUILD.in
 	$(call subst_version,^pkgver=)
+
+.PHONY: pkg-FreeBSD
+pkg-FreeBSD: FreeBSD/Makefile FreeBSD/pkg-descr FreeBSD/pkg-plist
+
+FreeBSD:
+	mkdir $@
+
+FreeBSD/Makefile: p/FreeBSD/Makefile.in | FreeBSD
+	$(call subst_version,^PORTVERSION=)
+
+FreeBSD/%: p/FreeBSD/% | FreeBSD
+	cp $< $@
 
 define subst_version
 	sed -e "/$(1)/s/__VERSION__/$(fix_version)/" \

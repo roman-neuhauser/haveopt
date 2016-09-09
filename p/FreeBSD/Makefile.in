@@ -1,0 +1,25 @@
+# $FreeBSD$
+
+PORTNAME=	haveopt
+PORTVERSION=	__VERSION__
+CATEGORIES=	devel
+
+MAINTAINER=	neuhauser+haveopt@sigpipe.cz
+COMMENT=	Option parser for sh
+
+USES=		gmake
+MAKEFILE=	GNUmakefile
+ALL_TARGET=	most
+TEST_TARGET=	check
+MAKE_ARGS=	MANDIR=${MANPREFIX}/man
+
+USE_GITHUB=	yes
+GH_ACCOUNT=	roman-neuhauser
+GH_PROJECT=	${PORTNAME}
+GH_TAGNAME=	v${PORTVERSION:S/+/-/g}
+
+TEST_DEPENDS=	cram:devel/cram
+
+NO_CHECKSUM=	yes
+
+.include <bsd.port.mk>
