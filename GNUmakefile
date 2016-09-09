@@ -38,7 +38,7 @@ clean:
 
 .PHONY: check
 check: $(.DEFAULT_GOAL)
-	env -i CRAM="$(CRAM)" PATH="$$PWD/tests:$$PWD:$(PATH)" $(CRAMCMD) tests
+	env -i CRAM="$(CRAM)" PATH="$$PWD/t:$$PWD:$(PATH)" $(CRAMCMD) t
 
 .PHONY: html
 html: README.html
