@@ -14,8 +14,6 @@ INSTALL_DIR    ?= install -m 755 -d
 INSTALL_SCRIPT ?= install -m 755
 RST2HTML       ?= $(call first_in_path,rst2html.py rst2html)
 
-PATH            = /usr/bin:/bin:/usr/sbin:/sbin
-
 name            = haveopt
 
 installed       = $(name).sh
