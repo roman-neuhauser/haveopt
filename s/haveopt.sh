@@ -56,7 +56,7 @@ haveopt()
   local haveopt_ip="$1" haveopt_np="$2" haveopt_ap="$3"
   shift 3
 
-  local haveopt_sopts= haveopt_soptstr= haveopt_lopts=
+  local haveopt_sopts= haveopt_lopts=
   local haveopt_argv_sep_seen=0
 
   while [ $# -gt 0 ]; do
@@ -70,7 +70,6 @@ haveopt()
     ;;
     ?=|?)
       haveopt_sopts="$haveopt_sopts $1"
-      haveopt_soptstr="$haveopt_soptstr${1%=}"
     ;;
     *)
       haveopt_lopts="$haveopt_lopts $1"
